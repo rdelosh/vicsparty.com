@@ -6,18 +6,17 @@ using System.Web.Mvc;
 
 namespace vicsparty.Controllers
 {
-    public class HomeController : Controller
+    public class privateroomMVCController : Controller
     {
-        public ActionResult Index()
+        // GET: privateroomMVC
+        public ActionResult createroom()
         {
-            ViewBag.Title = "Home Page";
 
             return View();
         }
-        public ActionResult createorjoin()
-        {
-            ViewBag.Title = "Home Page";
 
+        public ActionResult joinroom()
+        {
             return View();
         }
     }

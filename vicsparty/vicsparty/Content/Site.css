@@ -15,14 +15,14 @@ select,
 textarea {
     max-width: 280px;
 }
-.chooseroomdiv {
+.chooseroomdiv, .choosecreateorjoindiv{
     background: #99ffcc;
 }
-.chooseroomdiv .row {
+.chooseroomdiv .row, .choosecreateorjoindiv .row {
     text-align: center;
     margin-top: 10%;
 }
-.chooseroomdiv .row .btn {
+.chooseroomdiv .row .btn, .choosecreateorjoindiv .row .btn {
     height: 100px;
     width: 200px;
     font-size: 30px;
