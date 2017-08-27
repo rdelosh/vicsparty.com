@@ -8,20 +8,20 @@ namespace MacPortafolio.Utilities
 {
     public class mywebsocket : WebSocketHandler
     {
-        private int wsid;
-        private WebSocketCollection clients = new WebSocketCollection();
+        
+        private WebSocketCollection clients;
         private string name;
 
-        public mywebsocket(int id)
+        public mywebsocket(WebSocketCollection mywebsocketcollection)
         {
-            wsid = id;
+            clients = mywebsocketcollection;
         }
 
         public override void OnOpen()
         {
             name = this.WebSocketContext.QueryString["chatName"];
             clients.Add(this);
-            clients.Broadcast(name + "Se ha conectado"+ "a weboscket con id "+wsid);
+            clients.Broadcast(name + "Se ha conectado"+ "a weboscket con id ");
             
 
         }

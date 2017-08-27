@@ -17,12 +17,14 @@ namespace vicsparty.Controllers.api
 
         
 
-        public WebSocketHandler createnewroom()
+        private WebSocketHandler createnewroom()
         {
-            WebSocketHandler newwebsocket = new mywebsocket(singletonlistofwebsockets._listofwebsockets.Count+1);
-            singletonlistofwebsockets._listofwebsockets.Add(newwebsocket);
+            WebSocketCollectionWithID new_websocket_collection = new WebSocketCollectionWithID(singletonlistofwebsocketcollections._listofwebsocketcollections.Count+1);
+            mywebsocket newwebsocket = new mywebsocket(new_websocket_collection);
+            singletonlistofwebsocketcollections._listofwebsocketcollections.Add(new_websocket_collection);
             return newwebsocket;
         }
+
         public HttpResponseMessage Get()
         {
             if (System.Web.HttpContext.Current.IsWebSocketRequest)
@@ -36,5 +38,9 @@ namespace vicsparty.Controllers.api
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
+
+        
+
+
     }
 }
