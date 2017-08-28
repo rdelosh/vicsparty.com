@@ -14,11 +14,18 @@ namespace vicsparty.Controllers
 
             return View();
         }
-        public ActionResult createorjoin()
+        public ActionResult createorjoin(string nickname)
         {
             ViewBag.Title = "Home Page";
 
-            return View();
+            return View(nickname);
+        }
+
+        public ActionResult choosetypeofroom(string nickname)
+        {
+            ViewBag.Title = "Home Page";
+
+            return View(nickname);
         }
     }
 }

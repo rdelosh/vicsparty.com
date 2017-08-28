@@ -1,13 +1,167 @@
-﻿<div class="container">
-    <div class="chooseroomdiv">
-        <div class ="row">
-            <button onclick="location.href = 'http://localhost:55656/Home/createorjoin';" class="btn btn-primary">private room</button>
-        </div>
+﻿
+    @*<div class="setnickname">
         <div class="row">
-            <button class="btn btn-primary">public room</button>
+            <h1>Enter Nick Name</h1>
+            
+            <input id="nickname" type="text"/>
+            <br/>
+            <a id="setnicknameanchor">
+                <button onclick="location.href = 'http://localhost:55656/Home/choosetypeofroom';" class="btn btn-primary">ENTER</button>
+            </a>
         </div>
-        <div class="row">
-            <button class="btn btn-primary">lobby</button>
+            
+        
+    </div>*@
+    <div id ="modalid" class="modal tobedisplayedindialog">
+        <div class="modal-content container">
+           
+            <div class="setnickname">
+                <input id="nickname" type="text"/>
+                <br/>
+                <button onclick="submitnickname()" class="btn btn-primary">ENTER</button>
+                
+            </div>
+            
+
+
+            <div class="chooseroomdiv" style="display: none">
+                <div class ="row">
+                    <button onclick="publicroomchosen()" class="btn btn-primary">private room</button>
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary">public room</button>
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary">lobby</button>
+                </div>
+            </div>
+            
+            
+            <div class="choosecreateorjoindiv" style="display: none">
+                <div class ="row">
+                    <button onclick="creatroom()" class="btn btn-primary">Create</button>
+                </div>
+                <div class="row">
+                    <input id="joinroomnumber" type="text"/>
+                    <button onclick="joinroom()" class="btn btn-primary">join</button>
+                </div>
+        
+            </div>
+
         </div>
-        </div>
-</div>
+
+    </div>
+
+
+<script>
+    
+</script>
+
+@section scripts{
+
+    <script>
+        var nickname;
+        
+        $("#modalid").css({
+            display: 'block'
+        });
+        
+
+
+        function submitnickname() {
+            nickname = $("#nickname").val();
+            console.log("nickname set to " + nickname);
+
+            $(".setnickname").css({ display: "none" });
+            $(".chooseroomdiv").css({ display: "block" });
+        };
+
+
+        function publicroomchosen() {
+            
+            $(".chooseroomdiv").css({ display: "none" });
+            $(".choosecreateorjoindiv").css({ display: "block" });
+        }
+
+        function creatroom() {
+            
+            $("#modalid").css({ display: "none" });
+
+
+            var ws;
+            var url = "ws://localhost:55656/api/privateroom?name="+nickname;
+            ws = new WebSocket(url);
+            console.log(ws);
+            ws.onerror = function (e) {
+                console.log("error");
+                //conversation.append(createSpan('problem with connection'));
+            };
+            ws.onopen = function () {
+                console.log("has connected");
+                //conversation.innerHTML = 'Client connected <br/>';
+            };
+
+            ws.onmessage = function (e) {
+                //console.log(e);
+                //console.log(e.data.toString());
+                console.log(e.data);
+
+                //conversation.append(createSpan(e.data.toString()));
+                //$('#conversation').val($('#conversation').val() + "\n" + e.data.toString());
+                //$('#conversation').scrollTop($('#conversation')[0].scrollHeight);
+            };
+
+            ws.onclose = function () {
+                console.log("has gone away");
+                //conversation.innerHTML = 'Closed connection!';
+            };
+        }
+        
+        function joinroom() {
+
+                $("#modalid").css({ display: "none" });
+
+                var ws;
+            
+                var roomtojoin = $("#joinroomnumber").val();
+                console.log(roomtojoin);
+                var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin +"?name="+nickname;
+                ws = new WebSocket(url);
+                console.log(ws);
+
+
+
+
+                
+
+
+                ws.onerror = function (e) {
+                    console.log("error");
+                    //conversation.append(createSpan('problem with connection'));
+                };
+                ws.onopen = function () {
+                    console.log("has connected");
+                    //conversation.innerHTML = 'Client connected <br/>';
+                };
+
+                ws.onmessage = function (e) {
+                    console.log(e.data);
+                    
+                    //conversation.append(createSpan(e.data.toString()));
+                    //$('#conversation').val($('#conversation').val() + "\n" + e.data.toString());
+                    //$('#conversation').scrollTop($('#conversation')[0].scrollHeight);
+                };
+
+                ws.onclose = function () {
+                    console.log("has gone away");
+                    //conversation.innerHTML = 'Closed connection!';
+                };
+
+            };
+        
+
+
+    </script>
+
+}
+

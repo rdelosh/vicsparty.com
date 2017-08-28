@@ -1,29 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using Microsoft.Web.WebSockets;
+using vicsparty.Utilities;
 
 namespace MacPortafolio.Utilities
 {
     public class mywebsocket : WebSocketHandler
     {
         
-        private WebSocketCollection clients;
+        private WebSocketCollectionWithID clients;
         private string name;
 
-        public mywebsocket(WebSocketCollection mywebsocketcollection)
+        public mywebsocket(WebSocketCollectionWithID mywebsocketcollection)
         {
             clients = mywebsocketcollection;
+            mywebsocketcollection.Add(this);
         }
 
         public override void OnOpen()
         {
-            name = this.WebSocketContext.QueryString["chatName"];
-            clients.Add(this);
-            clients.Broadcast(name + "Se ha conectado"+ "a weboscket con id ");
-            
-
+            name = this.WebSocketContext.QueryString["name"];
+            //clients.Add(this);
+            clients.Broadcast(name + "Se ha conectado"+ "a weboscket con id "+ clients.collectionID);
+            clients.Broadcast(BitConverter.GetBytes(clients.collectionID));
+  
         }
 
         public override void OnMessage(string message)

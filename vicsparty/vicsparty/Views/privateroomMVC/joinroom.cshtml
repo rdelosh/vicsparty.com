@@ -16,13 +16,20 @@
         $("#joinbutton").click( function() {
             
         
+
+
+        
+
+
         var roomtojoin = $("#joinroomnumber").val();
         console.log(roomtojoin);
-        var url = "ws://localhost:55656/api/privateroomjoin/"+roomtojoin;
+        var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin;
         ws = new WebSocket(url);
         console.log(ws);
 
-        });
+
+
+
         $("#mytest").click(function() {
             ws.send("trolibertos");
         });
@@ -49,5 +56,7 @@
             console.log("has gone away");
             //conversation.innerHTML = 'Closed connection!';
         };
+
+        });
     </script>
 }

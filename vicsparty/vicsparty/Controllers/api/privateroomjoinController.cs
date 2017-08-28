@@ -37,6 +37,7 @@ namespace vicsparty.Controllers.api
                 if (element.collectionID == id)
                 {
                     mywebsocket newwebsocket = new mywebsocket(element);
+                    //element.Add(newwebsocket);
                     Debug.WriteLine("#####PASSED####");
                     return newwebsocket;
                 }

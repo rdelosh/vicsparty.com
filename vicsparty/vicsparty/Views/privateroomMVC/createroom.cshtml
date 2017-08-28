@@ -5,9 +5,12 @@
 }
 
 <h2>Room Created</h2>
+<h3>Room#</h3>
+
 @section scripts
 {
     <script>
+        
         var ws;
         var url = "ws://localhost:55656/api/privateroom";
         ws = new WebSocket(url);
@@ -22,8 +25,10 @@
         };
 
         ws.onmessage = function (e) {
-            console.log(e);
-            console.log(e.data.toString());
+            //console.log(e);
+            //console.log(e.data.toString());
+            console.log(e.data);
+
             //conversation.append(createSpan(e.data.toString()));
             //$('#conversation').val($('#conversation').val() + "\n" + e.data.toString());
             //$('#conversation').scrollTop($('#conversation')[0].scrollHeight);
