@@ -1,56 +1,94 @@
 ﻿
-    @*<div class="setnickname">
-        <div class="row">
-            <h1>Enter Nick Name</h1>
-            
+
+<div id ="modalid" class="modal tobedisplayedindialog">
+    <div class="modal-content container">
+           
+        <div class="setnickname">
+            <p>Enter Nickname</p>
             <input id="nickname" type="text"/>
             <br/>
-            <a id="setnicknameanchor">
-                <button onclick="location.href = 'http://localhost:55656/Home/choosetypeofroom';" class="btn btn-primary">ENTER</button>
-            </a>
+            <button onclick="submitnickname()" class="btn btn-primary">ENTER</button>
+
         </div>
             
+
+
+        <div class="chooseroomdiv" style="display: none">
+            <div class ="row">
+                <button onclick="publicroomchosen()" class="btn btn-primary">private room</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary">public room</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary">lobby</button>
+            </div>
+        </div>
+            
+            
+        <div class="choosecreateorjoindiv" style="display: none">
+            <div class ="row">
+                <button onclick="choosegame()" class="btn btn-primary">Create</button>
+            </div>
+            <div class="row">
+                    
+                <input id="joinroomnumber" type="text"/>
+                <button onclick="joinroom()" class="btn btn-primary">join</button>
+            </div>
         
-    </div>*@
-    <div id ="modalid" class="modal tobedisplayedindialog">
-        <div class="modal-content container">
-           
-            <div class="setnickname">
-                <input id="nickname" type="text"/>
-                <br/>
-                <button onclick="submitnickname()" class="btn btn-primary">ENTER</button>
+        </div>
+            
+        <div class="choosegamediv" style="display: none">
+            <div class="row">
+                <div class="col-md-3">
+                    <button class="createroombutton" onclick="createroom()">Typing race</button>
+                </div>
+                    
+            </div>
                 
-            </div>
-            
-
-
-            <div class="chooseroomdiv" style="display: none">
-                <div class ="row">
-                    <button onclick="publicroomchosen()" class="btn btn-primary">private room</button>
-                </div>
-                <div class="row">
-                    <button class="btn btn-primary">public room</button>
-                </div>
-                <div class="row">
-                    <button class="btn btn-primary">lobby</button>
-                </div>
-            </div>
-            
-            
-            <div class="choosecreateorjoindiv" style="display: none">
-                <div class ="row">
-                    <button onclick="creatroom()" class="btn btn-primary">Create</button>
-                </div>
-                <div class="row">
-                    <input id="joinroomnumber" type="text"/>
-                    <button onclick="joinroom()" class="btn btn-primary">join</button>
-                </div>
+                
         
-            </div>
-
         </div>
+            
 
     </div>
+
+</div>
+
+
+
+
+<div class="typingracediv container" style="display: none">
+    <button onclick="testws()" class="btn btn-default">test</button>
+    
+    
+</div>
+<div class="prebattlediv container" style="display: none">
+    <div class="row">
+        <div class="col-md-4">
+            <!--PLAYER 1-->
+        </div>
+        <div class="col-md-4">
+            <h1>VS</h1>
+        </div>
+        <div class="col-md-4">
+            <!--PLAYER 2-->
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <textarea class="form-control" readonly></textarea>
+        </div>
+        <div id="playerlist" class="col-md-2">
+            <!--PLAYERS WILL ENTER HERE-->
+
+        </div>
+    </div>
+    <div class="row">
+        <input type="text"/>
+    </div>
+</div>
 
 
 <script>
@@ -61,11 +99,10 @@
 
     <script>
         var nickname;
-        
+        var ws
         $("#modalid").css({
             display: 'block'
         });
-        
 
 
         function submitnickname() {
@@ -78,87 +115,95 @@
 
 
         function publicroomchosen() {
-            
+
             $(".chooseroomdiv").css({ display: "none" });
             $(".choosecreateorjoindiv").css({ display: "block" });
         }
 
-        function creatroom() {
-            
+        function choosegame() {
+            $(".choosecreateorjoindiv").css({ display: "none" });
+            $(".choosegamediv").css({ display: "block" });
+
+
+        }
+
+        function createroom() {
+
             $("#modalid").css({ display: "none" });
 
 
-            var ws;
-            var url = "ws://localhost:55656/api/privateroom?name="+nickname;
+            $(".prebattlediv").css({ display: "block" });
+            //if ($(".createroombutton").html() === "Typing race") {
+            //    $(".typingracediv").css({
+            //        display: "block"
+            //    });
+            //}
+
+            //var ws;
+            var url = "ws://localhost:55656/api/privateroom?name=" + nickname;
             ws = new WebSocket(url);
             console.log(ws);
-            ws.onerror = function (e) {
+            ws.onerror = function(e) {
                 console.log("error");
-                //conversation.append(createSpan('problem with connection'));
             };
-            ws.onopen = function () {
+            ws.onopen = function() {
                 console.log("has connected");
-                //conversation.innerHTML = 'Client connected <br/>';
             };
 
-            ws.onmessage = function (e) {
-                //console.log(e);
-                //console.log(e.data.toString());
+            ws.onmessage = function(e) {
                 console.log(e.data);
 
-                //conversation.append(createSpan(e.data.toString()));
-                //$('#conversation').val($('#conversation').val() + "\n" + e.data.toString());
-                //$('#conversation').scrollTop($('#conversation')[0].scrollHeight);
+                
+                
+                
+                    var newjsonobject = JSON.parse(e.data);
+                    if (newjsonobject.type === "joinalert") {
+                        console.log(newjsonobject);
+                        $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
+                    }
+                
             };
 
-            ws.onclose = function () {
+            ws.onclose = function() {
                 console.log("has gone away");
-                //conversation.innerHTML = 'Closed connection!';
             };
+
+
         }
         
         function joinroom() {
 
-                $("#modalid").css({ display: "none" });
+            $("#modalid").css({ display: "none" });
 
-                var ws;
-            
-                var roomtojoin = $("#joinroomnumber").val();
-                console.log(roomtojoin);
-                var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin +"?name="+nickname;
-                ws = new WebSocket(url);
-                console.log(ws);
+            //var ws;
 
+            var roomtojoin = $("#joinroomnumber").val();
+            console.log(roomtojoin);
+            var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
+            ws = new WebSocket(url);
+            console.log(ws);
 
-
-
-                
-
-
-                ws.onerror = function (e) {
-                    console.log("error");
-                    //conversation.append(createSpan('problem with connection'));
-                };
-                ws.onopen = function () {
-                    console.log("has connected");
-                    //conversation.innerHTML = 'Client connected <br/>';
-                };
-
-                ws.onmessage = function (e) {
-                    console.log(e.data);
-                    
-                    //conversation.append(createSpan(e.data.toString()));
-                    //$('#conversation').val($('#conversation').val() + "\n" + e.data.toString());
-                    //$('#conversation').scrollTop($('#conversation')[0].scrollHeight);
-                };
-
-                ws.onclose = function () {
-                    console.log("has gone away");
-                    //conversation.innerHTML = 'Closed connection!';
-                };
-
+            ws.onerror = function(e) {
+                console.log("error");
             };
-        
+            ws.onopen = function() {
+                console.log("has connected");
+            };
+
+            ws.onmessage = function(e) {
+                console.log(e.data);
+            };
+
+            ws.onclose = function() {
+                console.log("has gone away");
+            };
+
+
+        };
+
+        function testws() {
+            ws.send("test");
+        }
 
 
     </script>

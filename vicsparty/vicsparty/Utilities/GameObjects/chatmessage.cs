@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace vicsparty.Models
+namespace vicsparty.Utilities.GameObjects
 {
-    public class user
+    public class chatmessage:message
     {
-        public string nickname;
+        
     }
 }

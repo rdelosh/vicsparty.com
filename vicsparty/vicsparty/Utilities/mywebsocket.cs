@@ -5,7 +5,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using Microsoft.Web.WebSockets;
+using Newtonsoft.Json;
 using vicsparty.Utilities;
+using vicsparty.Utilities.GameObjects;
 
 namespace MacPortafolio.Utilities
 {
@@ -24,24 +26,27 @@ namespace MacPortafolio.Utilities
         public override void OnOpen()
         {
             name = this.WebSocketContext.QueryString["name"];
-            //clients.Add(this);
-            clients.Broadcast(name + "Se ha conectado"+ "a weboscket con id "+ clients.collectionID);
-            clients.Broadcast(BitConverter.GetBytes(clients.collectionID));
-  
+            clients.Broadcast(name + " has connected to room "+ clients.collectionID);
+            //broadcast json object with player who just connected
+            joinalertmessage newjoinalert = new joinalertmessage();
+            newjoinalert.sender = name;
+            newjoinalert.type = "joinalert";
+            clients.Broadcast(JsonConvert.SerializeObject(newjoinalert));
         }
 
         public override void OnMessage(string message)
         {
-            clients.Broadcast(message);
-
+            clients.Broadcast( name + " has said "+message);
+            
         }
 
         public override void OnClose()
         {
             clients.Remove(this);
-            clients.Broadcast(string.Format("{0} se ha ido", name));
+            clients.Broadcast(string.Format("{0} has gone away ", name));
 
         }
 
+        
     }
 }

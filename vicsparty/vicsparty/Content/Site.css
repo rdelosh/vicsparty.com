@@ -29,3 +29,8 @@ textarea {
     border-radius: 10px;
     
 }
+textarea {
+    min-width: 100%;
+    min-height: 300px;
+    padding: 0;
+}

@@ -153,6 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\privateroomMVC\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -195,8 +197,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\user.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\GameObjects\chatmessage.cs" />
+    <Compile Include="Utilities\GameObjects\gameupdatemessage.cs" />
+    <Compile Include="Utilities\GameObjects\joinalertmessage.cs" />
+    <Compile Include="Utilities\GameObjects\message.cs" />
+    <Compile Include="Utilities\GameObjects\prebattlemodificationmessage.cs" />
     <Compile Include="Utilities\singletonlistofwebsocketcollections.cs" />
     <Compile Include="Utilities\mywebsocket.cs" />
     <Compile Include="Utilities\WebSocketCollectionWithID.cs" />
@@ -253,10 +259,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\createorjoin.cshtml" />
-    <Content Include="Views\privateroomMVC\createroom.cshtml" />
-    <Content Include="Views\privateroomMVC\joinroom.cshtml" />
-    <Content Include="Views\Home\choosetypeofroom.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
