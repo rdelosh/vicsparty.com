@@ -28,10 +28,17 @@ namespace MacPortafolio.Utilities
             name = this.WebSocketContext.QueryString["name"];
             clients.Broadcast(name + " has connected to room "+ clients.collectionID);
             //broadcast json object with player who just connected
-            joinalertmessage newjoinalert = new joinalertmessage();
-            newjoinalert.sender = name;
-            newjoinalert.type = "joinalert";
-            clients.Broadcast(JsonConvert.SerializeObject(newjoinalert));
+            
+           
+            foreach (var element in clients)
+            {
+                joinalertmessage newjoinalert = new joinalertmessage();
+                newjoinalert.sender = ((mywebsocket)element).name;
+                newjoinalert.type = "joinalert";
+                clients.Broadcast(JsonConvert.SerializeObject(newjoinalert));
+            }
+
+            
         }
 
         public override void OnMessage(string message)

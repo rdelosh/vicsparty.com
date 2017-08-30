@@ -99,6 +99,7 @@
 
     <script>
         var nickname;
+        var listofplayers;
         var ws
         $("#modalid").css({
             display: 'block'
@@ -142,7 +143,35 @@
             //var ws;
             var url = "ws://localhost:55656/api/privateroom?name=" + nickname;
             ws = new WebSocket(url);
-            console.log(ws);
+            //console.log(ws);
+            wireevents();
+            //ws.onerror = function(e) {
+            //    console.log("error");
+            //};
+            //ws.onopen = function() {
+            //    console.log("has connected");
+            //};
+
+            //ws.onmessage = function(e) {
+            //    console.log(e.data);
+
+
+            //        var newjsonobject = JSON.parse(e.data);
+            //        if (newjsonobject.type === "joinalert") {
+            //            console.log(newjsonobject);
+            //            $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
+            //        }
+
+            //};
+
+            //ws.onclose = function() {
+            //    console.log("has gone away");
+            //};
+
+
+        }
+        function wireevents() {
+            $(".prebattlediv").css({ display: "block" });
             ws.onerror = function(e) {
                 console.log("error");
             };
@@ -156,21 +185,18 @@
                 
                 
                 
-                    var newjsonobject = JSON.parse(e.data);
-                    if (newjsonobject.type === "joinalert") {
-                        console.log(newjsonobject);
-                        $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
-                    }
+                var newjsonobject = JSON.parse(e.data);
+                if (newjsonobject.type === "joinalert") {
+                    console.log(newjsonobject);
+                    $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
+                }
                 
             };
 
             ws.onclose = function() {
                 console.log("has gone away");
             };
-
-
         }
-        
         function joinroom() {
 
             $("#modalid").css({ display: "none" });
@@ -181,22 +207,22 @@
             console.log(roomtojoin);
             var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
             ws = new WebSocket(url);
-            console.log(ws);
+            //console.log(ws);
+            wireevents();
+            //ws.onerror = function(e) {
+            //    console.log("error");
+            //};
+            //ws.onopen = function() {
+            //    console.log("has connected");
+            //};
 
-            ws.onerror = function(e) {
-                console.log("error");
-            };
-            ws.onopen = function() {
-                console.log("has connected");
-            };
+            //ws.onmessage = function(e) {
+            //    console.log(e.data);
+            //};
 
-            ws.onmessage = function(e) {
-                console.log(e.data);
-            };
-
-            ws.onclose = function() {
-                console.log("has gone away");
-            };
+            //ws.onclose = function() {
+            //    console.log("has gone away");
+            //};
 
 
         };
