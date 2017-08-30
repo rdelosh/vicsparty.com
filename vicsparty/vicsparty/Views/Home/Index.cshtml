@@ -99,8 +99,8 @@
 
     <script>
         var nickname;
-        var listofplayers;
-        var ws
+        var listofplayers = [];
+        var ws;
         $("#modalid").css({
             display: 'block'
         });
@@ -134,41 +134,18 @@
 
 
             $(".prebattlediv").css({ display: "block" });
-            //if ($(".createroombutton").html() === "Typing race") {
-            //    $(".typingracediv").css({
-            //        display: "block"
-            //    });
-            //}
 
-            //var ws;
             var url = "ws://localhost:55656/api/privateroom?name=" + nickname;
             ws = new WebSocket(url);
-            //console.log(ws);
+            
             wireevents();
-            //ws.onerror = function(e) {
-            //    console.log("error");
-            //};
-            //ws.onopen = function() {
-            //    console.log("has connected");
-            //};
+            includeself();
 
-            //ws.onmessage = function(e) {
-            //    console.log(e.data);
-
-
-            //        var newjsonobject = JSON.parse(e.data);
-            //        if (newjsonobject.type === "joinalert") {
-            //            console.log(newjsonobject);
-            //            $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
-            //        }
-
-            //};
-
-            //ws.onclose = function() {
-            //    console.log("has gone away");
-            //};
-
-
+        }
+        function includeself() {
+            listofplayers.push(nickname);
+            $("#playerlist").append('<p nick="'+ nickname +'" class="playerparagraph">' + nickname + '</p>');
+            
         }
         function wireevents() {
             $(".prebattlediv").css({ display: "block" });
@@ -182,21 +159,86 @@
             ws.onmessage = function(e) {
                 console.log(e.data);
 
-                
-                
-                
+
                 var newjsonobject = JSON.parse(e.data);
-                if (newjsonobject.type === "joinalert") {
-                    console.log(newjsonobject);
-                    $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
-                }
-                
+                console.log(newjsonobject);
+
+                updatelistofplayers(newjsonobject);
+                //if (newjsonobject.type === "joinalert") {
+                //    console.log(newjsonobject);
+                //    $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
+                //}
+
             };
 
             ws.onclose = function() {
                 console.log("has gone away");
             };
         }
+        
+        function updatelistofplayers(newjsonobject) {
+            //            var myjsonobj = JSON.parse(jsonstring);
+            console.log(newjsonobject.typeofalert);
+            if (newjsonobject.typeofalert === "joinalert") {
+                
+                for (var i = 0; i < newjsonobject.listofplayers.length; i++) {
+                    var tempnewplayer=null;
+                    for (var j = 0; j < listofplayers.length; j++) {
+                        console.log("comparing server: " +
+                            newjsonobject.listofplayers[i] +
+                            " vs client: " +
+                            listofplayers[j]);
+                        if (newjsonobject.listofplayers[i] === listofplayers[j]) {
+                            tempnewplayer = null;
+                            break;
+                        } else {
+                            tempnewplayer = newjsonobject.listofplayers[i];
+                        }
+                        
+                    }
+                    if (tempnewplayer !== null) {
+                        listofplayers.push(tempnewplayer);
+                        $("#playerlist").append('<p nick="' + tempnewplayer + '" class="playerparagraph">' + tempnewplayer + '</p>');
+                    }
+
+                }
+                console.log(listofplayers);
+            }
+
+            if (newjsonobject.typeofalert === "leavealert") {
+
+                for (var i = 0; i < listofplayers.length; i++) {
+                    var tempnewplayer = null;
+                    for (var j = 0; j < newjsonobject.listofplayers.length; j++) {
+                        console.log("comparing client: " +
+                            newjsonobject.listofplayers[j] +
+                            " vs server: " +
+                            listofplayers[i]);
+                        if (newjsonobject.listofplayers[j] === listofplayers[i]) {
+                            tempnewplayer = null;
+                            break;
+                        } else {
+                            tempnewplayer = listofplayers[i];
+                        }
+
+                    }
+                    if (tempnewplayer !== null) {
+                        
+                        listofplayers.splice($.inArray(tempnewplayer, listofplayers), 1);
+                        
+                        $("p[nick='"+tempnewplayer+"']").remove();
+                        
+                    }
+
+                }
+                console.log(listofplayers);
+            }
+
+
+
+        }
+
+
         function joinroom() {
 
             $("#modalid").css({ display: "none" });
@@ -209,21 +251,7 @@
             ws = new WebSocket(url);
             //console.log(ws);
             wireevents();
-            //ws.onerror = function(e) {
-            //    console.log("error");
-            //};
-            //ws.onopen = function() {
-            //    console.log("has connected");
-            //};
-
-            //ws.onmessage = function(e) {
-            //    console.log(e.data);
-            //};
-
-            //ws.onclose = function() {
-            //    console.log("has gone away");
-            //};
-
+            includeself();
 
         };
 
