@@ -18,10 +18,10 @@
                 <button onclick="publicroomchosen()" class="btn btn-primary">private room</button>
             </div>
             <div class="row">
-                <button class="btn btn-primary">public room</button>
+                <button class="disabledbutton btn btn-primary">public room</button>
             </div>
             <div class="row">
-                <button class="btn btn-primary">lobby</button>
+                <button class="disabledbutton btn btn-primary">lobby</button>
             </div>
         </div>
             
@@ -64,16 +64,23 @@
     
 </div>
 <div class="prebattlediv container" style="display: none">
+    <h1 id="room"></h1>
+    <button onclick="testws()"></button>
     <div class="row">
-        <div class="col-md-4">
-            <!--PLAYER 1-->
+        <div id="teamA" class="col-md-4 team">
+            <h1>Team A</h1>
+            <button class="teamA" onclick="jointeam('A')">Join Team!</button>
+            <!--TEAM A-->
         </div>
         <div class="col-md-4">
             <h1>VS</h1>
+            <button onclick="startthegame()" id="startgame" class="btn-danger">START GAME!!</button>
         </div>
-        <div class="col-md-4">
-            <!--PLAYER 2-->
-            
+        <div id="teamB" class="col-md-4 team">
+            <h1>Team B</h1>
+            <button  onclick="jointeam('B')">Join Team!</button>
+            <!--TEAM B-->
+
         </div>
     </div>
     <div class="row">
@@ -90,6 +97,22 @@
     </div>
 </div>
 
+<div class="container gamediv">
+    @*<div class="row">
+        <div class="teamAdiv col-md-5">
+            
+        </div>
+        <div class="teamBdiv col-md-5">
+
+        </div>
+        <div id="playerlist" class="col-md-2">
+
+        </div>
+
+    </div>*@
+    
+</div>
+
 
 <script>
     
@@ -98,13 +121,26 @@
 @section scripts{
 
     <script>
+        var room = "";
         var nickname;
         var listofplayers = [];
         var ws;
+        var teamA = [];
+        var teamB = [];
+        var teamstatesupdated = false;
         $("#modalid").css({
             display: 'block'
         });
 
+        $(".disabledbutton").css({
+            "background-color": "#d9d9d9",
+            color: "#737373"
+        });
+
+
+        function startthegame() {
+            
+        }
 
         function submitnickname() {
             nickname = $("#nickname").val();
@@ -129,24 +165,63 @@
         }
 
         function createroom() {
-
             $("#modalid").css({ display: "none" });
-
-
             $(".prebattlediv").css({ display: "block" });
-
             var url = "ws://localhost:55656/api/privateroom?name=" + nickname;
             ws = new WebSocket(url);
-            
+            teamstatesupdated = true;
             wireevents();
-            includeself();
+            includestate();
+        }
+
+        function joinroom() {
+            $("#modalid").css({ display: "none" });
+            var roomtojoin = $("#joinroomnumber").val();
+            console.log(roomtojoin);
+            var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
+            ws = new WebSocket(url);
+            wireevents();
+
+            var establishconnectioninterval = setInterval(function() {
+
+                    if (ws.readyState === 1) {
+
+
+                        var websocketrequest = {
+                            typeofalert: "getstateofteams",
+                            data: {
+                            }
+                        }
+
+                        console.log(websocketrequest);
+                        ws.send(JSON.stringify(websocketrequest));
+                        clearInterval(establishconnectioninterval);
+                        return;
+
+                    } else {
+                        console.log("wait for connection...");
+                        
+                    }
+
+                },
+                15);
+            includestate();
+
+
+            //TODO
+            //UPDATE  TEAMA ARRAY AND TEAM B ARRAY WITH INFO GIVEN IN DIVS AND TEAMA AND TEAM B VARS
+        };
+
+        function includestate() {
+            listofplayers.push(nickname);
+            $("#playerlist").append('<p nick="' + nickname + '" class="playerparagraph">' + nickname + '</p>');
+            //TODO
+
+
+            //update teamA array and team B array
 
         }
-        function includeself() {
-            listofplayers.push(nickname);
-            $("#playerlist").append('<p nick="'+ nickname +'" class="playerparagraph">' + nickname + '</p>');
-            
-        }
+
         function wireevents() {
             $(".prebattlediv").css({ display: "block" });
             ws.onerror = function(e) {
@@ -159,46 +234,135 @@
             ws.onmessage = function(e) {
                 console.log(e.data);
 
+                if (IsJsonString(e.data)) {
 
-                var newjsonobject = JSON.parse(e.data);
-                console.log(newjsonobject);
 
-                updatelistofplayers(newjsonobject);
-                //if (newjsonobject.type === "joinalert") {
-                //    console.log(newjsonobject);
-                //    $("#playerlist").append('<p>'+newjsonobject.sender+'</p>');
-                //}
+                    var newjsonobject = JSON.parse(e.data);
+                    console.log(newjsonobject);
+                    if (newjsonobject.typeofalert === "joinalert" || newjsonobject.typeofalert === "leavealert") {
+                        if (room === "") {
+                            updateroom(newjsonobject.room);
+                        }
+                        updatelistofplayers(newjsonobject);
+                    }
+                    if (newjsonobject.typeofalert === "getstateofteams" || newjsonobject.typeofalert==="jointeamrequest") {
+                        updateteam(newjsonobject);
+
+                    }
+
+                }
+
 
             };
 
             ws.onclose = function() {
-                console.log("has gone away");
+                console.log(nickname + " has gone away");
             };
         }
-        
+        function jointeam(param_team) {
+            //$("#team" + param_team).append("<p>" + nickname + "</p>");
+
+
+            var websocketrequest = {
+                typeofalert: "jointeamrequest",
+                data: {
+                    team: param_team,
+                    player: nickname
+                }
+            }
+            
+            ws.send(JSON.stringify(websocketrequest));
+
+
+        }
+
+        function updateteam(newjsonobject) {
+            if (newjsonobject.typeofalert === "getstateofteams") {
+                if(!teamstatesupdated){
+                    newjsonobject.teams.forEach(function(e) {
+                        if (e.team.name === "A") {
+                            e.team.players.forEach(function(player) {
+                                teamA.push(player);
+                                $("#team" + e.team.name).append("<p id='"+player+"' class='"+e.team.name+"'>" + player + "</p>");
+                            });
+                        }
+                        if (e.team.name === "B") {
+                            e.team.players.forEach(function (player) {
+                                teamB.push(player);
+                                //$("#team" + e.team.name).append("<p>" + player + "</p>");
+                                $("#team" + e.team.name).append("<p id='" + player + "' class='" + e.team.name + "'>" + player + "</p>");
+                            });
+                        }
+                });
+                teamstatesupdated = true;
+                }
+                
+            }
+            if (newjsonobject.typeofalert === "jointeamrequest") {
+                
+                if (newjsonobject.data.team === "A") {
+                    teamA.push(newjsonobject.data.player);
+                    $("#team" + newjsonobject.data.team).append("<p id='" + newjsonobject.data.player + "' class='" + newjsonobject.data.team + "'>" + newjsonobject.data.player + "</p>");
+                    try {
+                        $("#" + newjsonobject.data.player + ".B").remove();
+                        teamB.splice($.inarray(newjsonobject.jointeamrequest[1], teamB), 1);
+                        
+                        
+                    } catch (e) {
+
+                    }
+                }
+                if (newjsonobject.data.team === "B") {
+                    teamB.push(newjsonobject.data.player);
+                    $("#team" + newjsonobject.data.team).append("<p id='" + newjsonobject.data.player + "' class='" + newjsonobject.data.team + "'>" + newjsonobject.data.player + "</p>");
+                    try {
+                        $("#" + newjsonobject.data.player + ".A").remove();
+                        teamA.splice($.inarray(newjsonobject.jointeamrequest[1], teamA), 1);
+                        
+                        
+                    } catch (e) {
+
+                    }
+                }
+
+
+            }
+            
+
+            
+            //$("#team" + newjsonobject.jointeamrequest[0]).append("<p>" + newjsonobject.jointeamrequest[1] + "</p>");
+
+        }
+
+        function updateroom(myroomnumber) {
+            console.log(myroomnumber);
+            $("#room").text("Room: " + myroomnumber);
+            room = myroomnumber;
+        }
+
         function updatelistofplayers(newjsonobject) {
             //            var myjsonobj = JSON.parse(jsonstring);
             console.log(newjsonobject.typeofalert);
             if (newjsonobject.typeofalert === "joinalert") {
-                
+
                 for (var i = 0; i < newjsonobject.listofplayers.length; i++) {
-                    var tempnewplayer=null;
+                    var tempnewplayer = null;
                     for (var j = 0; j < listofplayers.length; j++) {
-                        console.log("comparing server: " +
-                            newjsonobject.listofplayers[i] +
-                            " vs client: " +
-                            listofplayers[j]);
                         if (newjsonobject.listofplayers[i] === listofplayers[j]) {
                             tempnewplayer = null;
                             break;
                         } else {
                             tempnewplayer = newjsonobject.listofplayers[i];
                         }
-                        
+
                     }
                     if (tempnewplayer !== null) {
                         listofplayers.push(tempnewplayer);
-                        $("#playerlist").append('<p nick="' + tempnewplayer + '" class="playerparagraph">' + tempnewplayer + '</p>');
+                        $("#playerlist").append('<p nick="' +
+                            tempnewplayer +
+                            '" class="playerparagraph">' +
+                            tempnewplayer +
+                            '</p>');
                     }
 
                 }
@@ -210,10 +374,6 @@
                 for (var i = 0; i < listofplayers.length; i++) {
                     var tempnewplayer = null;
                     for (var j = 0; j < newjsonobject.listofplayers.length; j++) {
-                        console.log("comparing client: " +
-                            newjsonobject.listofplayers[j] +
-                            " vs server: " +
-                            listofplayers[i]);
                         if (newjsonobject.listofplayers[j] === listofplayers[i]) {
                             tempnewplayer = null;
                             break;
@@ -223,11 +383,11 @@
 
                     }
                     if (tempnewplayer !== null) {
-                        
+
                         listofplayers.splice($.inArray(tempnewplayer, listofplayers), 1);
-                        
-                        $("p[nick='"+tempnewplayer+"']").remove();
-                        
+
+                        $("p[nick='" + tempnewplayer + "']").remove();
+
                     }
 
                 }
@@ -235,32 +395,26 @@
             }
 
 
-
         }
 
-
-        function joinroom() {
-
-            $("#modalid").css({ display: "none" });
-
-            //var ws;
-
-            var roomtojoin = $("#joinroomnumber").val();
-            console.log(roomtojoin);
-            var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
-            ws = new WebSocket(url);
-            //console.log(ws);
-            wireevents();
-            includeself();
-
-        };
 
         function testws() {
             ws.send("test");
         }
 
+        function IsJsonString(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            if (str.charAt(0) === '{') {
+                return true;
+            }
+            return false;
+        }
 
     </script>
 
-}
+    }
 

@@ -206,6 +206,9 @@
     <Compile Include="Utilities\singletonlistofwebsocketcollections.cs" />
     <Compile Include="Utilities\mywebsocket.cs" />
     <Compile Include="Utilities\WebSocketCollectionWithID.cs" />
+    <Compile Include="Utilities\WebSocketRequests\JoinRequest.cs" />
+    <Compile Include="Utilities\WebSocketRequests\teamEntity.cs" />
+    <Compile Include="Utilities\WebSocketRequests\WebSocketRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

@@ -34,3 +34,7 @@ textarea {
     min-height: 300px;
     padding: 0;
 }
+.teamA .teamB {
+    border: 2px solid #00fa9a;
+}
+
