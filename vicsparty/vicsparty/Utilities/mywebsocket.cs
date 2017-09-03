@@ -124,12 +124,27 @@ namespace MacPortafolio.Utilities
                     serializedteams.Add(teamAjJObject);
                     serializedteams.Add(teamBjJObject);
 
-
-
-
                     o["teams"] = serializedteams;
                     o["typeofalert"] = "getstateofteams";
                     clients.Broadcast(o.ToString());
+                }
+                if (mywebsocketrequest.typeofalert.Equals("startthegamerequest"))
+                {
+                    string data = JsonConvert.SerializeObject(mywebsocketrequest.data);
+                    StartTheGameRequest startthegamerequest = JsonConvert.DeserializeObject<StartTheGameRequest>(data);
+                    if (isvalidstartthegamerequest(startthegamerequest))
+                    {
+                        clients.Broadcast(message);
+                    }
+                    
+                }
+                if (mywebsocketrequest.typeofalert.Equals("ingamerequest"))
+                {
+                    //string data = JsonConvert.SerializeObject(mywebsocketrequest.data);
+                    //InGameRequest ingamerequest = JsonConvert.DeserializeObject<InGameRequest>(data);
+                    //if (isvalidingamerquest(ingamerequest))
+                        clients.Broadcast(message);
+                    
                 }
 
             }
@@ -140,6 +155,16 @@ namespace MacPortafolio.Utilities
             }
             
             
+        }
+
+        
+        private bool isvalidstartthegamerequest(StartTheGameRequest startthegamerequest)
+        {
+            if (startthegamerequest.teamA.Count == 1 && startthegamerequest.teamB.Count==1)
+            {
+                return true;
+            }
+            return false;
         }
 
         public override void OnClose()

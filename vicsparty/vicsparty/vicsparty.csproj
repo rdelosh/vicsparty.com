@@ -206,7 +206,9 @@
     <Compile Include="Utilities\singletonlistofwebsocketcollections.cs" />
     <Compile Include="Utilities\mywebsocket.cs" />
     <Compile Include="Utilities\WebSocketCollectionWithID.cs" />
+    <Compile Include="Utilities\WebSocketRequests\InGameRequest.cs" />
     <Compile Include="Utilities\WebSocketRequests\JoinRequest.cs" />
+    <Compile Include="Utilities\WebSocketRequests\StartTheGameRequest.cs" />
     <Compile Include="Utilities\WebSocketRequests\teamEntity.cs" />
     <Compile Include="Utilities\WebSocketRequests\WebSocketRequest.cs" />
   </ItemGroup>
@@ -241,6 +243,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\vicsparty.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
