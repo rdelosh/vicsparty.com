@@ -155,7 +155,8 @@
         var teamstatesupdated = false;
         var timeclockA;
         var timeclockB;
-        var url = "vicsparty.com";
+        var domain = "vicsparty.com";
+        //         localhost:55656
         /*
 
 
@@ -438,7 +439,7 @@
         function createroom() {
             $("#modalid").css({ display: "none" });
             $(".prebattlediv").css({ display: "block" });
-            var url = "ws://+"url"+/api/privateroom?name=" + nickname;
+            var url = "ws://"+domain+"/api/privateroom?name=" + nickname;
             ws = new WebSocket(url);
             teamstatesupdated = true;
             wireevents();
@@ -450,7 +451,7 @@
             $("#modalid").css({ display: "none" });
             var roomtojoin = $("#joinroomnumber").val();
             console.log(roomtojoin);
-            var url = "ws://+"url"+/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
+            var url = "ws://"+domain+"/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
             ws = new WebSocket(url);
             wireevents();
 
