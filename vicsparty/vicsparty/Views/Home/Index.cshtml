@@ -93,7 +93,7 @@
     </div>
     <div class="row">
         <div class="col-md-10">
-            <textarea class="form-control" readonly></textarea>
+            <textarea id="chat" class="form-control" readonly></textarea>
         </div>
         <div class="col-md-2 playerlist">
             <!--PLAYERS WILL ENTER HERE-->
@@ -101,15 +101,16 @@
         </div>
     </div>
     <div class="row">
-        <input type="text"/>
+        <input id="chatinput" type="text"/>
     </div>
 </div>
 
 <div class="container gamediv" style="display: none">
+    <button onclick="teamcreationroom()">Back to team creation room</button>
     <div class="row">
-        <div class="teamAdiv col-md-5 gameteamdiv" >
+        <div class="teamAdiv col-md-5 gameteamdiv">
             <div class="row">
-                <h1>time</h1>
+                <h1 id="timeeamA">time</h1>
             </div>
             <div class="row">
                 <textarea id="teamAgametextarea" readonly="">Being a first-time author and going on Oprah but being told you can't mention your book is pretty much akin to having Charlize Theron walk up real close to you, take off all her clothes, look you in the eye -- lean so close you can feel her warm breath -- and whisper in your ear: You may not touch me.</textarea>
@@ -120,7 +121,7 @@
         </div>
         <div class="teamBdiv col-md-5 gameteamdiv">
             <div class="row">
-                <h1>time</h1>
+                <h1 id="timeeamB">time</h1>
             </div>
             <div class="row">
                 <textarea id="teamBgametextarea" readonly="">Being a first-time author and going on Oprah but being told you can't mention your book is pretty much akin to having Charlize Theron walk up real close to you, take off all her clothes, look you in the eye -- lean so close you can feel her warm breath -- and whisper in your ear: You may not touch me.</textarea>
@@ -134,7 +135,7 @@
         </div>
 
     </div>
-    
+
 </div>
 
 
@@ -152,6 +153,10 @@
         var teamA = [];
         var teamB = [];
         var teamstatesupdated = false;
+        var timeclockA;
+        var timeclockB;
+        var domain = "vicsparty.com";
+        //         localhost:55656
         /*
 
 
@@ -167,6 +172,13 @@
 
 
         */
+        $("#chatinput").on('keyup',function(e) {
+            if (e.keyCode == 13) {
+                ws.send($("#chatinput").val());
+                $("#chatinput").val("");
+            }
+            
+        })
         $("#modalid").css({
             display: 'block'
         });
@@ -175,6 +187,80 @@
             "background-color": "#d9d9d9",
             color: "#737373"
         });
+
+        function teamcreationroom() {
+            $(".prebattlediv").css({ display: "block" });
+            $(".gamediv").css({ display: "none" });
+            stopclock(timeclockA);
+            stopclock(timeclockB);
+            $("#timeeamA").text("TIME");
+            $("#timeeamB").text("TIME");
+            
+        }
+        function startclocks() {
+            var startingdate = Math.floor(Date.now() / 1000);
+            var elapsedminutes = 0;
+            var elapsedseconds = 0;
+            timeclockA = setInterval(function() {
+                    if (elapsedseconds > 58) {
+                        startingdate = startingdate + 60;
+                        elapsedminutes = elapsedminutes + 1;
+                        elapsedseconds = 0;
+                    }
+                    elapsedseconds = Math.floor(Date.now() / 1000) - startingdate;
+
+                    if (elapsedseconds < 10) {
+                        
+                            $("#timeeamA").text("TIME: " + elapsedminutes + ":0" + elapsedseconds);    
+                        
+                        
+                            
+                        
+                        
+                    } else {
+                        
+                            $("#timeeamA").text("TIME: " + elapsedminutes + ":" + elapsedseconds);    
+                        
+                        
+                            
+                        
+                    }
+                },
+                1000);
+
+
+            timeclockB = setInterval(function() {
+                    if (elapsedseconds > 58) {
+                        startingdate = startingdate + 60;
+                        elapsedminutes = elapsedminutes + 1;
+                        elapsedseconds = 0;
+                    }
+                    elapsedseconds = Math.floor(Date.now() / 1000) - startingdate;
+
+                    if (elapsedseconds < 10) {
+                        
+                            
+                        
+                        
+                        $("#timeeamB").text("TIME: " + elapsedminutes + ":0" + elapsedseconds);  
+                        
+                        
+                    } else {
+                        
+                        
+                        
+                        
+                        $("#timeeamB").text("TIME: " + elapsedminutes + ":" + elapsedseconds);  
+                        
+                    }
+                },
+                1000);
+            
+        }
+
+        function stopclock(timeclock) {
+            clearInterval(timeclock);
+        }
 
 
         function startthegame() {
@@ -199,6 +285,10 @@
             $(".prebattlediv").css({
                 display: "none"
             });
+            
+            startclocks();    
+            
+            
             $("#teamAgametextarea,#teamAgametextareatype").bind("cut copy paste",
                 function(e) {
                     e.preventDefault();
@@ -211,40 +301,118 @@
 
         }
 
-        function typecharattextarea() {
-            if (event.key.length === 1) {
-                var websocketrequest = {
-                    typeofalert: "ingamerequest",
-                    data: {
-                        player: nickname,
-                        key: event.key
-                    }
-                }
-
-                ws.send(JSON.stringify(websocketrequest));
-            }
-        }
-
         function updateingametextareas(newjsonobject) {
 
             if (newjsonobject.data.player !== nickname) {
-                
 
 
-            
-                if (teamA.indexOf(newjsonobject.data.player)>=0 ) {
+                if (teamA.indexOf(newjsonobject.data.player) >= 0) {
                     console.log(teamA.indexOf(nickname));
-                    $("#teamAgametextareatype").val($("#teamAgametextareatype").val() + newjsonobject.data.key);
+                    $("#teamAgametextareatype").val(newjsonobject.data.key);
                     console.log("A textarea being filled with " + newjsonobject.data.key);
                 }
                 if (teamB.indexOf(newjsonobject.data.player) >= 0) {
                     console.log(teamB.indexOf(nickname));
-                    $("#teamBgametextareatype").val($("#teamBgametextareatype").val() + newjsonobject.data.key);
+                    $("#teamBgametextareatype").val(newjsonobject.data.key);
                     console.log("B textarea being filled with " + newjsonobject.data.key);
                 }
             }
 
         }
+
+        function typecharattextarea() {
+            var temptext = "";
+            
+            if ($("#teamAgametextareatype").val().length === $("#teamAgametextarea").val().length && teamA.indexOf(nickname) >= 0) {
+                    if ($("#teamAgametextareatype").val() === $("#teamAgametextarea").val()) {
+                        var websocketrequest2 = {
+                            typeofalert: "victoryrequest",
+                            data: {
+                                player: nickname
+                            }
+                        }
+                        ws.send(JSON.stringify(websocketrequest2));
+                        console.log("A HAS COMPLETED THE GAME!!!!!");
+                }
+                return;
+            }
+
+            if ($("#teamBgametextareatype").val().length === $("#teamBgametextarea").val().length && teamB.indexOf(nickname) >= 0) {
+                    if ($("#teamBgametextareatype").val() === $("#teamBgametextarea").val()) {
+                        var websocketrequest3 = {
+                            typeofalert: "victoryrequest",
+                            data: {
+                                player: nickname
+                            }
+                        }
+                        ws.send(JSON.stringify(websocketrequest3));
+                        console.log("B HAS COMPLETED THE GAME!!!!!");
+
+
+                     }
+                    return;
+                }
+            //$("#teamAgametextareatype,#teamBgametextareatype").css({
+            //    "background-color": "white"
+            //});
+                
+            if (teamA.indexOf(nickname) >= 0) {
+                $("#teamAgametextareatype").css({ "background-color": "white" });
+                    temptext = $("#teamAgametextareatype").val();
+                    if ($("#teamAgametextareatype").val() !== ($("#teamAgametextarea").val()).substring(0, $("#teamAgametextareatype").val().length)) {
+                        console.log(($("#teamAgametextarea").val()).substring(0, ($("#teamAgametextareatype").val().length)));
+                        console.log($("#teamAgametextareatype").val() + " ");
+                        $("#teamAgametextareatype").css({
+                            "background-color": "red"
+                        });
+                    }
+                }
+            if (teamB.indexOf(nickname) >= 0) {
+                temptext = $("#teamBgametextareatype").val();
+                $("#teamBgametextareatype").css({ "background-color": "white" });
+                if ($("#teamBgametextareatype").val() !== ($("#teamBgametextarea").val()).substring(0, $("#teamBgametextareatype").val().length)) {
+                    console.log(($("#teamBgametextarea").val()).substring(0, ($("#teamBgametextareatype").val().length)));
+                    console.log($("#teamBgametextareatype").val() + " ");
+                    $("#teamBgametextareatype").css({
+                        "background-color": "red"
+                    });
+                }
+            }
+
+                //if (teamB.indexOf(nickname) >= 0) {
+                //    temptext = $("#teamBgametextareatype").val();
+                //}
+                var websocketrequest = {
+                    typeofalert: "ingamerequest",
+                    data: {
+                        player: nickname,
+                        key: temptext
+                    }
+                }
+
+                ws.send(JSON.stringify(websocketrequest));
+            
+        }
+
+        function playervictory(newjsonobject) {
+            if (teamA.indexOf(newjsonobject.data.player) >= 0) {
+
+                stopclock(timeclockA);
+                $("#teamAgametextareatype").css({
+                    "background-color": "green"
+                });
+            }
+            if (teamB.indexOf(newjsonobject.data.player) >= 0) {
+                stopclock(timeclockB);
+                $("#teamBgametextareatype").css({
+                    "background-color": "green"
+                });
+            }
+
+
+        }
+
+
 
         function submitnickname() {
             nickname = $("#nickname").val();
@@ -271,10 +439,11 @@
         function createroom() {
             $("#modalid").css({ display: "none" });
             $(".prebattlediv").css({ display: "block" });
-            var url = "ws://localhost:55656/api/privateroom?name=" + nickname;
+            var url = "ws://"+domain+"/api/privateroom?name=" + nickname;
             ws = new WebSocket(url);
             teamstatesupdated = true;
             wireevents();
+            listofplayers.push(nickname);
             includestate();
         }
 
@@ -282,7 +451,7 @@
             $("#modalid").css({ display: "none" });
             var roomtojoin = $("#joinroomnumber").val();
             console.log(roomtojoin);
-            var url = "ws://localhost:55656/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
+            var url = "ws://"+domain+"/api/privateroomjoin/" + roomtojoin + "?name=" + nickname;
             ws = new WebSocket(url);
             wireevents();
 
@@ -309,6 +478,7 @@
 
                 },
                 15);
+            listofplayers.push(nickname);
             includestate();
 
 
@@ -317,7 +487,7 @@
         };
 
         function includestate() {
-            listofplayers.push(nickname);
+            
             $(".playerlist").append('<p nick="' + nickname + '" class="playerparagraph">' + nickname + '</p>');
             //TODO
 
@@ -348,18 +518,21 @@
                             updateroom(newjsonobject.room);
                         }
                         updatelistofplayers(newjsonobject);
-                    }
-                    if (newjsonobject.typeofalert === "getstateofteams" ||
+                    } if (newjsonobject.typeofalert === "getstateofteams" ||
                         newjsonobject.typeofalert === "jointeamrequest") {
                         updateteam(newjsonobject);
 
-                    }
-                    if (newjsonobject.typeofalert === "startthegamerequest") {
+                    } if (newjsonobject.typeofalert === "startthegamerequest") {
                         begingame();
-                    }
-                    if (newjsonobject.typeofalert === "ingamerequest") {
+                    } if (newjsonobject.typeofalert === "ingamerequest") {
                         updateingametextareas(newjsonobject);
-                    }
+                    } if (newjsonobject.typeofalert === "victoryrequest") {
+                        playervictory(newjsonobject);
+                    } 
+
+                } else {
+                    console.log("TRYING TO SEND CHAT MEESSAGE");
+                    $("#chat").val($("#chat").val()+"\n"+e.data);
                 }
 
 

@@ -7,6 +7,6 @@ namespace vicsparty.Utilities.GameObjects
 {
     public class chatmessage:message
     {
-        
+    
     }
 }

@@ -118,3 +118,4 @@ C:\Users\nila\Source\Repos\vicsparty.com\vicsparty\vicsparty\bin\Antlr3.Runtime.
 C:\Users\nila\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Debug\vicsparty.csprojResolveAssemblyReference.cache
 C:\Users\nila\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Debug\vicsparty.dll
 C:\Users\nila\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Debug\vicsparty.pdb
+C:\Users\victor\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Debug\vicsparty.csproj.CoreCompileInputs.cache

@@ -140,12 +140,15 @@ namespace MacPortafolio.Utilities
                 }
                 if (mywebsocketrequest.typeofalert.Equals("ingamerequest"))
                 {
-                    //string data = JsonConvert.SerializeObject(mywebsocketrequest.data);
-                    //InGameRequest ingamerequest = JsonConvert.DeserializeObject<InGameRequest>(data);
-                    //if (isvalidingamerquest(ingamerequest))
                         clients.Broadcast(message);
-                    
+    
                 }
+
+                if (mywebsocketrequest.typeofalert.Equals("victoryrequest"))
+                {
+                    clients.Broadcast(message);
+                }
+
 
             }
             catch (Exception e)

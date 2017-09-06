@@ -79,14 +79,17 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/Antlr3.Runtime.dll">
       <publishTime>02/22/2013 11:43:40</publishTime>
     </File>
+    <File Include="bin/Antlr3.Runtime.pdb">
+      <publishTime>02/22/2013 11:43:40</publishTime>
+    </File>
     <File Include="bin/ApplicationInsights.config">
       <publishTime>08/26/2017 10:22:53</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>09/03/2017 18:30:56</publishTime>
+      <publishTime>09/06/2017 04:23:56</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>09/03/2017 18:30:56</publishTime>
+      <publishTime>09/06/2017 04:23:56</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>11/30/2016 16:07:42</publishTime>
@@ -188,7 +191,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 07:04:30</publishTime>
     </File>
     <File Include="bin/vicsparty.dll">
-      <publishTime>09/03/2017 18:30:47</publishTime>
+      <publishTime>09/06/2017 03:34:25</publishTime>
+    </File>
+    <File Include="bin/vicsparty.pdb">
+      <publishTime>09/06/2017 03:34:25</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>09/10/2013 20:28:38</publishTime>
@@ -221,13 +227,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2017 10:22:53</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>09/03/2017 18:30:54</publishTime>
+      <publishTime>09/06/2017 04:23:54</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>08/26/2017 10:22:27</publishTime>
     </File>
     <File Include="Scripts/bootstrap.min.js">
       <publishTime>08/26/2017 10:22:27</publishTime>
+    </File>
+    <File Include="Scripts/divbinding.js">
+      <publishTime>09/05/2017 19:18:18</publishTime>
     </File>
     <File Include="Scripts/jquery-1.10.2.js">
       <publishTime>08/26/2017 10:22:31</publishTime>
@@ -251,7 +260,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2017 10:22:36</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>09/03/2017 18:30:09</publishTime>
+      <publishTime>09/06/2017 04:23:34</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>08/26/2017 10:22:18</publishTime>
@@ -266,7 +275,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2017 10:22:18</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/01/2017 00:31:59</publishTime>
+      <publishTime>09/06/2017 03:34:31</publishTime>
     </File>
   </ItemGroup>
 </Project>

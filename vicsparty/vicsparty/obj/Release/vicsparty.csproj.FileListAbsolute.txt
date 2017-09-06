@@ -58,3 +58,4 @@ C:\Users\victor\Source\Repos\vicsparty.com\vicsparty\vicsparty\bin\Antlr3.Runtim
 C:\Users\victor\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Release\vicsparty.csprojResolveAssemblyReference.cache
 C:\Users\victor\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Release\vicsparty.dll
 C:\Users\victor\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Release\vicsparty.pdb
+C:\Users\victor\Source\Repos\vicsparty.com\vicsparty\vicsparty\obj\Release\vicsparty.csproj.CoreCompileInputs.cache
