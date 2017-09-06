@@ -187,12 +187,17 @@
             "background-color": "#d9d9d9",
             color: "#737373"
         });
+        
 
         function teamcreationroom() {
             $(".prebattlediv").css({ display: "block" });
             $(".gamediv").css({ display: "none" });
             stopclock(timeclockA);
             stopclock(timeclockB);
+            $("#teamAgametextareatype").val("");
+            $("#teamBgametextareatype").val("");
+            $("#teamAgametextareatype").css({ "background-color": "white" });
+            $("#teamBgametextareatype").css({ "background-color": "white" });
             $("#timeeamA").text("TIME");
             $("#timeeamB").text("TIME");
             
