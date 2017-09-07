@@ -2,20 +2,22 @@
 
 <div id ="modalid" class="modal tobedisplayedindialog">
     <div class="modal-content container">
-           
+        
         <div class="setnickname">
+            <img src="../../Content/images/vicsparty.png" />   
             <div class="row">
-                <p>Enter Nickname</p>    
+
+                <p>Enter Nickname</p>
             </div>
             <div class="row">
-                <input id="nickname" type="text" />    
+                <input id="nickname" type="text"/>
             </div>
             <div class="row">
                 <button onclick="submitnickname()" class="btn btn-primary">ENTER</button>
             </div>
-            
-            
-            
+
+
+
 
         </div>
             
@@ -39,7 +41,8 @@
                 <button onclick="choosegame()" class="btn btn-primary">Create</button>
             </div>
             <div class="row">
-                    
+                <h1>OR</h1><br/>
+                <h3>Room Number:</h3>
                 <input id="joinroomnumber" type="text"/>
                 <button onclick="joinroom()" class="btn btn-primary">join</button>
             </div>
@@ -48,10 +51,12 @@
             
         <div class="choosegamediv" style="display: none">
             <div class="row">
-                <div class="col-md-3">
-                    <button class="createroombutton" onclick="createroom()">Typing race</button>
+                
+                <div class="col-md-3 typingracedivbutton">
+                    <img class="img-responsive"src="../../Content/images/typing.png"/>
+                    <h1>Typeracer</h1>
                 </div>
-                    
+                
             </div>
                 
                 
@@ -66,27 +71,22 @@
 
 
 
-<div class="typingracediv container" style="display: none">
-    <button onclick="testws()" class="btn btn-default">test</button>
-    
-    
-</div>
+
 <div class="prebattlediv container" style="display: none">
     <h1 id="room"></h1>
-    <button onclick="testws()"></button>
     <div class="row">
         <div id="teamA" class="col-md-4 team">
             <h1>Team A</h1>
-            <button class="teamA" onclick="jointeam('A')">Join Team!</button>
+            <button class="teamA btn-success" onclick="jointeam('A')">Join Team!</button>
             <!--TEAM A-->
         </div>
-        <div class="col-md-4">
+        <div id="vsdiv" class="col-md-4">
             <h1>VS</h1>
             <button onclick="startthegame()" id="startgame" class="btn-danger">START GAME!!</button>
         </div>
         <div id="teamB" class="col-md-4 team">
             <h1>Team B</h1>
-            <button  onclick="jointeam('B')">Join Team!</button>
+            <button  class="btn-success" onclick="jointeam('B')">Join Team!</button>
             <!--TEAM B-->
 
         </div>
@@ -172,6 +172,16 @@
 
 
         */
+        
+        //$("#chatinput").css({
+        //    "max-width": "1000px",
+        //    width:"1000px"
+        //});
+        $(".typingracedivbutton").click(function () {
+            
+            createroom();
+        }).css("cursor", "pointer");
+
         $("#chatinput").on('keyup',function(e) {
             if (e.keyCode == 13) {
                 ws.send($("#chatinput").val());
@@ -699,10 +709,6 @@
 
         }
 
-
-        function testws() {
-            ws.send("test");
-        }
 
         function IsJsonString(str) {
             try {

@@ -1,26 +1,42 @@
-﻿body {
+﻿@font-face {
+    font-family: "Jtmw";
+    src: url("fonts/Just tell me what regular (Version 2).otf");
+}
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
+* {
+    font-family: Jtmw;
+    font-size: 35px;
+}
 /* Set padding to keep content from hitting the edges */
-.body-content {
+/*.body-content {
     padding-left: 15px;
     padding-right: 15px;
-}
+}*/
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
     max-width: 280px;
+    font-size: 20px;
 }
 .chooseroomdiv, .choosecreateorjoindiv, .setnickname{
     background: #99ffcc;
 }
-.chooseroomdiv .row, .choosecreateorjoindiv .row, .setnickname .row{
-    text-align: center;
-    margin-top: 10%;
+
+    .chooseroomdiv .row, .choosecreateorjoindiv .row,.setnickname .row {
+        text-align: center;
+        padding-top: 5%;
+        padding-bottom: 5%;
+        margin: 0;
+        text-align: center;
+    }
+.modal-content {
+    margin-top: 5%;
+    padding: 0;
 }
 .chooseroomdiv .row .btn, .choosecreateorjoindiv .row .btn, .setnickname .row .btn, .setnickname .row p{
     height: 100px;
@@ -36,8 +52,53 @@ textarea {
     padding: 0;
 }
 .team {
-    border: 2px solid #00fa9a;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border: 5px solid #b3e6ff;
+    border-radius: 25px;
+    background-color: #00aaff;
+}
+.team h1 {
+    text-align: center;
+    font-family: Jtmw;
+}
+
+
+#vsdiv * {
+    margin-top: 10%;
+    font-size: 50px;
+    font-family: Jtmw;
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+.team * {
+    display: block;
+    margin: auto;
+    text-align: center;
 }
 .gameteamdiv {
-    border: 2px solid #00fa9a;
+    border: 10px solid #00fa9a;
+    border-radius:25px
+}
+.typingracedivbutton:hover {
+    background-color: black;
+    color: white;
+}
+.setnickname img {
+    display: block;
+    
+    margin: auto;
+}
+
+.prebattlediv .row, .prebattlediv div {
+    padding-left: 0;
+}
+
+#chatinput {
+    max-width: 100%;
+    width: 100%;
+}
+.prebattlediv h1 {
+    font-family: Jtmw;
 }
